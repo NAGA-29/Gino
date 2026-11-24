@@ -6,6 +6,8 @@ import { InstructionEditPage } from "../pages/InstructionEditPage";
 import { InstructionListPage } from "../pages/InstructionListPage";
 import { InstructionNewPage } from "../pages/InstructionNewPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
+import { ProjectDetailPage } from "../pages/ProjectDetailPage";
+import { ProjectListPage } from "../pages/ProjectListPage";
 import { Layout } from "./Layout";
 
 export const router = createBrowserRouter([
@@ -18,6 +20,8 @@ export const router = createBrowserRouter([
       { path: "/instructions/:id", element: <InstructionDetailPage /> },
       { path: "/instructions/:id/edit", element: <InstructionEditPage /> },
       { path: "/instructions/:id/diff", element: <InstructionDiffPage /> },
+      { path: "/projects", element: <ProjectListPage /> },
+      { path: "/projects/:id", element: <ProjectDetailPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },
