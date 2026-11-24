@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { DashboardPage } from "../pages/DashboardPage";
+import { ExportPage } from "../pages/ExportPage";
 import { InstructionDetailPage } from "../pages/InstructionDetailPage";
 import { InstructionDiffPage } from "../pages/InstructionDiffPage";
 import { InstructionEditPage } from "../pages/InstructionEditPage";
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
       { path: "/instructions/:id/diff", element: <InstructionDiffPage /> },
       { path: "/projects", element: <ProjectListPage /> },
       { path: "/projects/:id", element: <ProjectDetailPage /> },
+      { path: "/export", element: <ExportPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },
