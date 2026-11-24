@@ -11,7 +11,7 @@ import { notifyError, notifySuccess } from "../components/notify";
 import { ExportPreview } from "../features/export/ExportPreview";
 import { ProjectForm } from "../features/project/ProjectForm";
 import { ProjectProfile } from "../features/project/ProjectProfile";
-import { useInvalidatingMutation, useProject } from "../hooks/queries";
+import { keys, useDeleteMutation, useInvalidatingMutation, useProject } from "../hooks/queries";
 
 export function ProjectDetailPage() {
   const { id = "" } = useParams();
@@ -26,7 +26,7 @@ function Detail({ project }: { project: Project }) {
   const update = useInvalidatingMutation((v: { name: string; description: string }) =>
     endpoints.updateProject(project.id, v),
   );
-  const remove = useInvalidatingMutation(() => endpoints.deleteProject(project.id));
+  const remove = useDeleteMutation(() => endpoints.deleteProject(project.id), keys.project(project.id));
 
   const confirmDelete = () =>
     modals.openConfirmModal({
@@ -34,14 +34,16 @@ function Detail({ project }: { project: Project }) {
       children: <Text size="sm">Instruction自体は削除されません。紐付けのみ解除されます。</Text>,
       labels: { confirm: "Delete", cancel: "Cancel" },
       confirmProps: { color: "red" },
-      onConfirm: () =>
-        remove.mutate(undefined, {
-          onSuccess: () => {
-            notifySuccess("削除しました");
-            navigate("/projects");
-          },
-          onError: notifyError,
-        }),
+      onConfirm: async () => {
+        try {
+          // mutateAsync は画面がアンマウントされても解決するため、確実に遷移できる
+          await remove.mutateAsync();
+          navigate("/projects");
+          notifySuccess("削除しました");
+        } catch (err) {
+          notifyError(err);
+        }
+      },
     });
 
   return (

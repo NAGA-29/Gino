@@ -38,17 +38,33 @@ export const useProject = (id: string) => useQuery({ queryKey: keys.project(id),
 export const useProjectInstructions = (id: string) =>
   useQuery({ queryKey: keys.projectInstructions(id), queryFn: () => endpoints.listProjectInstructions(id) });
 
-/** 変更系の後は関連キャッシュをまとめて無効化する (個人用なので粒度は粗くてよい) */
+/**
+ * 変更系の後は関連キャッシュをまとめて無効化する (個人用なので粒度は粗くてよい)。
+ * 無効化は待たない: 削除後の詳細画面が 404 で再描画される前に遷移などの onSuccess を実行するため。
+ */
 export function useInvalidatingMutation<TArgs, TResult>(fn: (args: TArgs) => Promise<TResult>) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: fn,
-    onSuccess: async () => {
-      await Promise.all([
-        qc.invalidateQueries({ queryKey: ["instructions"] }),
-        qc.invalidateQueries({ queryKey: ["projects"] }),
-        qc.invalidateQueries({ queryKey: keys.dashboard }),
-      ]);
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["instructions"] });
+      void qc.invalidateQueries({ queryKey: ["projects"] });
+      void qc.invalidateQueries({ queryKey: ["export"] });
+      void qc.invalidateQueries({ queryKey: keys.dashboard });
+    },
+  });
+}
+
+/** 削除用: 対象のキャッシュを破棄してから遷移する */
+export function useDeleteMutation(fn: () => Promise<void>, removeKey: readonly unknown[]) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fn,
+    onSuccess: () => {
+      qc.removeQueries({ queryKey: removeKey });
+      void qc.invalidateQueries({ queryKey: ["instructions", "list"] });
+      void qc.invalidateQueries({ queryKey: ["projects"], exact: true });
+      void qc.invalidateQueries({ queryKey: keys.dashboard });
     },
   });
 }

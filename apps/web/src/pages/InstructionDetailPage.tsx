@@ -12,7 +12,7 @@ import { ExportPreview } from "../features/export/ExportPreview";
 import { ActivationView } from "../features/instruction/ActivationView";
 import { InstructionProjects } from "../features/instruction/InstructionProjects";
 import { VersionList } from "../features/instruction/VersionList";
-import { useInstruction, useInvalidatingMutation } from "../hooks/queries";
+import { keys, useDeleteMutation, useInstruction, useInvalidatingMutation } from "../hooks/queries";
 
 const TABS = ["overview", "activation", "instructions", "versions", "projects", "export"] as const;
 
@@ -29,7 +29,7 @@ function Detail({ instruction: i }: { instruction: InstructionDetail }) {
   const content = i.currentVersion?.content;
 
   const setStatus = useInvalidatingMutation((status: Status) => endpoints.updateInstruction(i.id, { status }));
-  const remove = useInvalidatingMutation(() => endpoints.deleteInstruction(i.id));
+  const remove = useDeleteMutation(() => endpoints.deleteInstruction(i.id), keys.instruction(i.id));
 
   const confirmDelete = () =>
     modals.openConfirmModal({
@@ -41,14 +41,16 @@ function Detail({ instruction: i }: { instruction: InstructionDetail }) {
       ),
       labels: { confirm: "Delete", cancel: "Cancel" },
       confirmProps: { color: "red" },
-      onConfirm: () =>
-        remove.mutate(undefined, {
-          onSuccess: () => {
-            notifySuccess("削除しました");
-            navigate("/instructions");
-          },
-          onError: notifyError,
-        }),
+      onConfirm: async () => {
+        try {
+          // mutateAsync は画面がアンマウントされても解決するため、確実に遷移できる
+          await remove.mutateAsync();
+          navigate("/instructions");
+          notifySuccess("削除しました");
+        } catch (err) {
+          notifyError(err);
+        }
+      },
     });
 
   return (
