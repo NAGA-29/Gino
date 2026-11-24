@@ -7,7 +7,11 @@ import { AppError } from "./errors";
 import { InstructionRepository } from "./repositories/instruction-repository";
 import { ProjectRepository } from "./repositories/project-repository";
 import { instructionRoutes } from "./routes/instructions";
+import { dashboardRoutes } from "./routes/dashboard";
+import { exportRoutes } from "./routes/exports";
 import { projectRoutes } from "./routes/projects";
+import { DashboardService } from "./services/dashboard-service";
+import { ExportService } from "./services/export-service";
 import { InstructionService } from "./services/instruction-service";
 import { ProjectService } from "./services/project-service";
 
@@ -24,10 +28,14 @@ export function createApp({ db, corsOrigin = [], log = false }: AppOptions) {
   const projectRepo = new ProjectRepository(db);
   const instructionService = new InstructionService(instructionRepo);
   const projectService = new ProjectService(projectRepo, instructionRepo);
+  const exportService = new ExportService(instructionRepo, projectService);
+  const dashboardService = new DashboardService(instructionRepo, projectRepo);
 
   api.get("/health", (c) => c.json({ ok: true }));
   api.route("/instructions", instructionRoutes(instructionService));
   api.route("/projects", projectRoutes(projectService));
+  api.route("/exports", exportRoutes(exportService));
+  api.route("/dashboard", dashboardRoutes(dashboardService));
 
   const app = new Hono();
   if (log) app.use(logger());
