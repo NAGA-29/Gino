@@ -1,0 +1,19 @@
+{
+  "name": "ai-instruction-registry",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter ./apps/* dev",
+    "dev:api": "pnpm --filter @air/api dev",
+    "dev:web": "pnpm --filter @air/web dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "db:migrate": "pnpm --filter @air/api db:migrate",
+    "db:seed": "pnpm --filter @air/api db:seed"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
