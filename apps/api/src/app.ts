@@ -4,6 +4,9 @@ import { logger } from "hono/logger";
 import { API_BASE_PATH, type ApiErrorBody } from "@air/shared";
 import type { Database } from "./db/client";
 import { AppError } from "./errors";
+import { InstructionRepository } from "./repositories/instruction-repository";
+import { instructionRoutes } from "./routes/instructions";
+import { InstructionService } from "./services/instruction-service";
 
 export interface AppOptions {
   db: Database;
@@ -14,7 +17,11 @@ export interface AppOptions {
 export function createApp({ db, corsOrigin = [], log = false }: AppOptions) {
   const api = new Hono();
 
+  const instructionRepo = new InstructionRepository(db);
+  const instructionService = new InstructionService(instructionRepo);
+
   api.get("/health", (c) => c.json({ ok: true }));
+  api.route("/instructions", instructionRoutes(instructionService));
 
   const app = new Hono();
   if (log) app.use(logger());
@@ -34,8 +41,6 @@ export function createApp({ db, corsOrigin = [], log = false }: AppOptions) {
     return c.json<ApiErrorBody>({ error: { code: "INTERNAL_ERROR", message: "Internal server error" } }, 500);
   });
 
-  // db は後続のルート登録で利用する
-  void db;
   return app;
 }
 
