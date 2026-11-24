@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import { DashboardPage } from "../pages/DashboardPage";
+import { InstructionEditPage } from "../pages/InstructionEditPage";
 import { InstructionListPage } from "../pages/InstructionListPage";
+import { InstructionNewPage } from "../pages/InstructionNewPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import { Layout } from "./Layout";
 
@@ -10,6 +12,8 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <DashboardPage /> },
       { path: "/instructions", element: <InstructionListPage /> },
+      { path: "/instructions/new", element: <InstructionNewPage /> },
+      { path: "/instructions/:id/edit", element: <InstructionEditPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },
