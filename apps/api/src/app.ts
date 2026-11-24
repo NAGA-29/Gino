@@ -5,8 +5,11 @@ import { API_BASE_PATH, type ApiErrorBody } from "@air/shared";
 import type { Database } from "./db/client";
 import { AppError } from "./errors";
 import { InstructionRepository } from "./repositories/instruction-repository";
+import { ProjectRepository } from "./repositories/project-repository";
 import { instructionRoutes } from "./routes/instructions";
+import { projectRoutes } from "./routes/projects";
 import { InstructionService } from "./services/instruction-service";
+import { ProjectService } from "./services/project-service";
 
 export interface AppOptions {
   db: Database;
@@ -18,10 +21,13 @@ export function createApp({ db, corsOrigin = [], log = false }: AppOptions) {
   const api = new Hono();
 
   const instructionRepo = new InstructionRepository(db);
+  const projectRepo = new ProjectRepository(db);
   const instructionService = new InstructionService(instructionRepo);
+  const projectService = new ProjectService(projectRepo, instructionRepo);
 
   api.get("/health", (c) => c.json({ ok: true }));
   api.route("/instructions", instructionRoutes(instructionService));
+  api.route("/projects", projectRoutes(projectService));
 
   const app = new Hono();
   if (log) app.use(logger());
