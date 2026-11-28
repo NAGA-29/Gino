@@ -31,7 +31,7 @@ export function ProjectForm({
       <TextInput
         label="Name"
         required
-        placeholder="Motion Ginko"
+        placeholder="Motion Studio"
         value={value.name}
         onChange={(e) => setValue({ ...value, name: e.currentTarget.value })}
       />

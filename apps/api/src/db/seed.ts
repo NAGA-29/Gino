@@ -101,8 +101,8 @@ async function main() {
   });
 
   const policy = await call("POST", "/instructions", {
-    name: "naga-development-policy",
-    displayName: "NAGA Development Policy",
+    name: "personal-development-policy",
+    displayName: "Personal Development Policy",
     description: "個人の開発思想・好み・ルール。",
     scope: "personal",
     status: "published",
@@ -127,16 +127,16 @@ async function main() {
   });
 
   const motion = await call("POST", "/instructions", {
-    name: "motion-ginko",
-    displayName: "Motion Ginko Development",
-    description: "ArkEveシリーズのモーションプラットフォーム MotionGinko 固有のルール。",
+    name: "motion-studio",
+    displayName: "Motion Studio Development",
+    description: "サンプルプロジェクト Motion Studio 固有のルール。",
     scope: "project",
     status: "published",
     version: "1.3.0",
     content: {
-      activation: { when: ["MotionGinkoのコードを変更する"], requiredContext: ["motion"] },
-      instructions: ["モーションデータの座標系・単位を明示する", "Indigo(エディタ)との互換性を壊さない"],
-      tags: ["motion", "arkeve"],
+      activation: { when: ["Motion Studioのコードを変更する"], requiredContext: ["motion"] },
+      instructions: ["モーションデータの座標系・単位を明示する", "既存のモーションデータ形式との互換性を壊さない"],
+      tags: ["motion"],
     },
   });
 
@@ -160,7 +160,7 @@ async function main() {
     content: { instructions: ["評価観点を列挙する"], tags: ["eval"] },
   });
 
-  const ginko = await call("POST", "/projects", { name: "Motion Ginko", description: "ArkEve: モーションを扱うプラットフォーム" });
+  const motionStudio = await call("POST", "/projects", { name: "Motion Studio", description: "モーションを扱うサンプルプロジェクト" });
   for (const [i, priority] of [
     [apiReview, 10],
     [security, 0],
@@ -168,7 +168,7 @@ async function main() {
     [motion, 10],
     [motionProcessing, 0],
   ] as const) {
-    await call("POST", `/projects/${ginko.id}/instructions`, { instructionId: i.id, priority });
+    await call("POST", `/projects/${motionStudio.id}/instructions`, { instructionId: i.id, priority });
   }
 
   const cli = await call("POST", "/projects", { name: "Go CLI Tools", description: "" });

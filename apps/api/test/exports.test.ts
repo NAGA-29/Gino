@@ -20,8 +20,8 @@ describe("exports API", () => {
   });
 
   it("exports a project profile (enabled only, layered)", async () => {
-    const { json: p } = await request("POST", "/projects", { name: "Motion Ginko" });
-    const proj = await mk("motion-ginko", "project", ["モーションデータはBVHで扱う"]);
+    const { json: p } = await request("POST", "/projects", { name: "Motion Studio" });
+    const proj = await mk("motion-studio", "project", ["モーションデータはBVHで扱う"]);
     const gen = await mk("api-review", "general");
     const off = await mk("disabled-one", "general");
     await request("POST", `/projects/${p.id}/instructions`, { instructionId: proj.id });
@@ -29,10 +29,10 @@ describe("exports API", () => {
     await request("POST", `/projects/${p.id}/instructions`, { instructionId: off.id, enabled: false });
 
     const res = await request("POST", "/exports", { projectId: p.id });
-    expect(res.json.filename).toBe("motion-ginko.md");
-    expect(res.json.content).toContain("# Motion Ginko — AI Instructions");
+    expect(res.json.filename).toBe("motion-studio.md");
+    expect(res.json.content).toContain("# Motion Studio — AI Instructions");
     expect(res.json.content).not.toContain("disabled-one");
-    expect(res.json.content.indexOf("api-review")).toBeLessThan(res.json.content.indexOf("motion-ginko`"));
+    expect(res.json.content.indexOf("api-review")).toBeLessThan(res.json.content.indexOf("motion-studio`"));
   });
 
   it("supports file download", async () => {
