@@ -58,13 +58,13 @@ describe("MarkdownExporter", () => {
 
   it("groups project profile by scope layer", () => {
     const r = getExporter("markdown").export({
-      project: { name: "Motion Ginko", description: "" },
-      items: [item({}), item({ name: "motion-ginko", displayName: "Motion Ginko Dev", scope: "project" })],
+      project: { name: "Motion Studio", description: "" },
+      items: [item({}), item({ name: "motion-studio", displayName: "Motion Studio Dev", scope: "project" })],
       generatedAt,
     });
-    expect(r.filename).toBe("motion-ginko.md");
-    expect(r.content).toContain("# Motion Ginko — AI Instructions");
+    expect(r.filename).toBe("motion-studio.md");
+    expect(r.content).toContain("# Motion Studio — AI Instructions");
     expect(r.content.indexOf("## General")).toBeLessThan(r.content.indexOf("## Project"));
-    expect(r.content).toContain("### Motion Ginko Dev");
+    expect(r.content).toContain("### Motion Studio Dev");
   });
 });

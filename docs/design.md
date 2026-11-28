@@ -222,7 +222,7 @@ AIへ与える再利用可能な指示。
 API Design Review
 Laravel Architecture Review
 Security Review
-Motion Ginko Development
+Motion Studio Development
 Go CLI Development
 ```
 
@@ -263,10 +263,10 @@ SQL Review
 例:
 
 ```text
-Motion Ginko
-Tsubomi
-SHIORI
-DADADA
+Motion Studio
+Sample Web App
+Sample Mobile App
+Internal Tools
 ```
 
 ## EXPERIMENTAL
@@ -357,7 +357,7 @@ Project単位で利用するInstructionをまとめる。
 例:
 
 ```text
-Motion Ginko
+Motion Studio
 ```
 
 ```yaml
@@ -368,10 +368,10 @@ instructions:
     - security-review
 
   personal:
-    - naga-development-policy
+    - personal-development-policy
 
   project:
-    - motion-ginko
+    - motion-studio
     - motion-processing
 ```
 
@@ -551,7 +551,7 @@ v2.1.0
 Go CLI
 v1.4.2
 
-Motion Ginko
+Motion Studio
 v1.3.0
 ```
 

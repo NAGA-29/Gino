@@ -8,14 +8,14 @@ const mk = async (name: string, scope: string) =>
 
 describe("projects API", () => {
   it("CRUD", async () => {
-    const created = await request("POST", "/projects", { name: "Motion Ginko", description: "motion platform" });
+    const created = await request("POST", "/projects", { name: "Motion Studio", description: "motion platform" });
     expect(created.status).toBe(201);
     const id = created.json.id;
 
-    expect((await request("POST", "/projects", { name: "Motion Ginko" })).status).toBe(409);
+    expect((await request("POST", "/projects", { name: "Motion Studio" })).status).toBe(409);
 
     const list = await request("GET", "/projects");
-    expect(list.json).toMatchObject([{ name: "Motion Ginko", instructionCount: 0 }]);
+    expect(list.json).toMatchObject([{ name: "Motion Studio", instructionCount: 0 }]);
 
     const upd = await request("PUT", `/projects/${id}`, { description: "updated" });
     expect(upd.json.description).toBe("updated");
@@ -25,9 +25,9 @@ describe("projects API", () => {
   });
 
   it("builds a project profile ordered by scope layer and priority", async () => {
-    const { json: project } = await request("POST", "/projects", { name: "Motion Ginko" });
-    const motion = await mk("motion-ginko", "project");
-    const policy = await mk("naga-development-policy", "personal");
+    const { json: project } = await request("POST", "/projects", { name: "Motion Studio" });
+    const motion = await mk("motion-studio", "project");
+    const policy = await mk("personal-development-policy", "personal");
     const api = await mk("api-review", "general");
     const sec = await mk("security-review", "general");
 
@@ -40,8 +40,8 @@ describe("projects API", () => {
     expect(profile.json.map((p: any) => p.instruction.name)).toEqual([
       "security-review",
       "api-review",
-      "naga-development-policy",
-      "motion-ginko",
+      "personal-development-policy",
+      "motion-studio",
     ]);
 
     // upsert: 無効化
@@ -51,7 +51,7 @@ describe("projects API", () => {
 
     // instruction 側にも project が見える / projectId で絞り込める
     const detail = await request("GET", `/instructions/${motion.id}`);
-    expect(detail.json.projects).toEqual([{ id: project.id, name: "Motion Ginko" }]);
+    expect(detail.json.projects).toEqual([{ id: project.id, name: "Motion Studio" }]);
     const filtered = await request("GET", `/instructions?projectId=${project.id}`);
     expect(filtered.json).toHaveLength(4);
 

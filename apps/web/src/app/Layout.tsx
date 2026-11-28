@@ -1,6 +1,7 @@
 import { ActionIcon, AppShell, Burger, Group, NavLink, Text, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
+  IconBook,
   IconDashboard,
   IconFileExport,
   IconFolders,
@@ -17,6 +18,7 @@ const NAV = [
   { to: "/instructions/new", label: "New Instruction", icon: IconPlus, exact: true },
   { to: "/projects", label: "Projects", icon: IconFolders },
   { to: "/export", label: "Export", icon: IconFileExport },
+  { to: "/docs", label: "ドキュメント", icon: IconBook },
 ];
 
 export function Layout() {

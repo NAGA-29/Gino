@@ -1,5 +1,6 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import { DashboardPage } from "../pages/DashboardPage";
+import { DocsPage } from "../pages/DocsPage";
 import { ExportPage } from "../pages/ExportPage";
 import { InstructionDetailPage } from "../pages/InstructionDetailPage";
 import { InstructionDiffPage } from "../pages/InstructionDiffPage";
@@ -24,6 +25,8 @@ export const router = createBrowserRouter([
       { path: "/projects", element: <ProjectListPage /> },
       { path: "/projects/:id", element: <ProjectDetailPage /> },
       { path: "/export", element: <ExportPage /> },
+      { path: "/docs", element: <Navigate to="/docs/overview" replace /> },
+      { path: "/docs/:slug", element: <DocsPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

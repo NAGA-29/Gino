@@ -57,13 +57,13 @@ describe("diffContents", () => {
 describe("composeProfile", () => {
   it("orders by layer, priority, name and drops disabled", () => {
     const out = composeProfile([
-      { name: "motion-ginko", scope: "project", enabled: true, priority: 0 },
+      { name: "motion-studio", scope: "project", enabled: true, priority: 0 },
       { name: "security-review", scope: "general", enabled: true, priority: 0 },
       { name: "api-review", scope: "general", enabled: true, priority: 0 },
-      { name: "naga-policy", scope: "personal", enabled: true, priority: 0 },
+      { name: "personal-policy", scope: "personal", enabled: true, priority: 0 },
       { name: "important", scope: "general", enabled: true, priority: 10 },
       { name: "off", scope: "general", enabled: false, priority: 99 },
     ] as const);
-    expect(out.map((e) => e.name)).toEqual(["important", "api-review", "security-review", "naga-policy", "motion-ginko"]);
+    expect(out.map((e) => e.name)).toEqual(["important", "api-review", "security-review", "personal-policy", "motion-studio"]);
   });
 });
